@@ -2,7 +2,7 @@
 #define QUEUE_H
 
 #include <stdbool.h>
-#include "../RR/process.h"
+#include "process.h"
 
 // data types definition
 

@@ -48,6 +48,9 @@ Processes GetProcesses(FILE *in)
 			&(processes.processList[i].pid), &(processes.processList[i].run),
 			&(processes.processList[i].io), &(processes.processList[i].repeat));
 
+		processes.processList[i].b = 0;
+		processes.processList[i].q = 0;
+		
 		if ((r != 5 && r != EOF) || ferror(in))
 		{
 			char tempStr[100];

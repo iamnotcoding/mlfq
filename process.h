@@ -3,20 +3,23 @@
 
 typedef struct _process
 {
-    unsigned time;
-    unsigned pid;
-    unsigned run;
-    unsigned io;
-    unsigned repeat;
+	unsigned time;
+	unsigned pid;
+	unsigned run;
+	unsigned io;
+	unsigned repeat;
+
+	unsigned b;
+	unsigned q;
 } Process;
 
 typedef struct _processes
 {
-    Process *processList;
-    size_t processesNum;
+	Process *processList;
+	size_t processesNum;
 } Processes;
 
 Processes GetProcesses(FILE *in);
 void CloseProcesses(Processes processes);
 
-#endif 
+#endif

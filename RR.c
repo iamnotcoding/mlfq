@@ -1,3 +1,5 @@
+#define _GNU_SOURCE
+
 #include <errno.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -5,7 +7,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "../queue/queue.h"
+#include "queue.h"
 #include "print-err.h"
 #include "process.h"
 
