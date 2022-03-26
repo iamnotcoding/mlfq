@@ -10,7 +10,7 @@
 #define INPUT_FILE "processes.txt"
 #define OUTPUT_FILE "result.txt"
 
-#define DELAY 0.1
+#define DELAY 0
 //#define DELAY 0
 
 int main(void)
@@ -18,10 +18,10 @@ int main(void)
 	unsigned quantum;
 	FILE *input, *output;
 
-	input = fopen(INPUT_FILE, "r");
+	//input = fopen(INPUT_FILE, "r");
 
 	Processes processes;
-
+/*
 	if (input == NULL)
 	{
 		char tempStr[100];
@@ -41,14 +41,15 @@ int main(void)
 
 		PRINT_ERR(tempStr);
 	}
+*/
 
-	processes = GetProcesses(input);
+	processes = GetProcesses(stdin);
 
 	// RR(stdout, processes, quantum, DELAY);
 	MLFQ(stdout, processes, DELAY);
 
 	CloseProcesses(processes);
 
-	fclose(input);
-	fclose(output);
+	//fclose(input);
+	//fclose(output);
 }

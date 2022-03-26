@@ -141,46 +141,54 @@ void MLFQ(FILE *out, Processes processes, double delaySec)
 			// if there are no processes to execute
 			else
 			{
-				// waits for a new process which is in the jobqueue
-				continue;
+				// if there are no process to execute and the job queue is empty
+				if (IsQueueEmpty(*pJobQueue))
+				{
+					break;
+				}
+				else
+				{
+					// waits for a new process which is in the jobqueue
+					continue;
+				}
 			}
 
 			// gets a process from the readyqueue
 			curProcess = DeQueue(pCurReadyQueue);
 
-			for (unsigned i = 0; i < curProcess.repeat; i++)
+			// if quantum is samller than or equal to repeat, runs quantum
+			// times else if qunatum is bigger than repeat, runs repeat
+			// times
+			while (curProcess.remainingTicks != 0)
 			{
-				// if quantum is samller than or equal to repeat, runs quantum
-				// times else if qunatum is bigger than repeat, runs repeat
-				// times
-				while(curProcess.remainingTicks != 0)
+				Delay(delaySec);
+
+				fprintf(out,
+						"RUN: Process %u started execution from level %u "
+						"at time %u; wants to execute for %u ticks.\n",
+						curProcess.pid, curQueueLev, clock,
+						curProcess.remainingTicks);
+
+				if (quantum < curProcess.remainingTicks)
 				{
-					Delay(delaySec);
+					clock += quantum;
 
-					fprintf(out,
-							"RUN: Process %u started execution from level %u "
-							"at time %u; wants to execute for %u ticks.\n",
-							curProcess.pid, curQueueLev, clock,
-							curProcess.remainingTicks);
+					curProcess.g++;
+					curProcess.remainingTicks -= quantum;
+				}
+				else
+				{
+					clock += curProcess.remainingTicks;
 
-					if (quantum <= curProcess.remainingTicks)
-					{
-						clock += quantum;
-
-						curProcess.g++;
-						curProcess.remainingTicks -= quantum;
-					}
-					else
-					{
-						clock += curProcess.remainingTicks;
-
-						curProcess.b++;
-						curProcess.remainingTicks = 0;
-					}
-
-					//GetQueueLevel(curProcess, curQueueLev);
+					curProcess.b++;
+					curProcess.remainingTicks = 0;
 				}
 
+				// GetQueueLevel(curProcess, curQueueLev);
+			}
+
+			if (curProcess.repeat > 0)
+			{
 				Delay(delaySec);
 
 				fprintf(out, "I/O: Process %u blocked for I/O at time %u.\n",
@@ -189,26 +197,16 @@ void MLFQ(FILE *out, Processes processes, double delaySec)
 				clock += curProcess.io;
 
 				curProcess.remainingTicks = curProcess.run;
+				curProcess.repeat--;
+
+				EnQueue(pJobQueue, curProcess);
 			}
-
-			EnQueue(pJobQueue, curProcess);
-
-			// this is the last phase
-
-			Delay(delaySec);
-
-			fprintf(out,
-					"RUN: Process %u started execution from level %u "
-					"at time %u; wants to execute for %u ticks.\n",
-					curProcess.pid, curQueueLev, clock, curProcess.run);
-
-			clock += curProcess.run;
-
-			Delay(delaySec);
-
-			fprintf(out, "FNISHED: Process %u fnished at time %u\n",
-					curProcess.pid, clock);
-
+			else
+			{
+				curProcess.repeat = 0;
+				fprintf(out, "FINISHED: Process %u finished at time %u.\n",
+						curProcess.pid, clock);
+			}
 		} while (true);
 	}
 
