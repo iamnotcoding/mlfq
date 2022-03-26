@@ -9,13 +9,15 @@ typedef struct _process
 	unsigned io;
 	unsigned repeat;
 
+	// process status
 	unsigned b;
-	unsigned q;
+	unsigned g;
+	unsigned remainingTicks;
 } Process;
 
 typedef struct _processes
 {
-	Process *processList;
+	Process *processList; 
 	size_t processesNum;
 } Processes;
 

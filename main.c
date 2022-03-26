@@ -3,15 +3,15 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "RR/RR.h"
-#include "RR/process.h"
+#include "mlfq.h"
 #include "print-err.h"
+#include "process.h"
 
 #define INPUT_FILE "processes.txt"
 #define OUTPUT_FILE "result.txt"
 
-//#define DELAY 0.1
-#define DELAY 0
+#define DELAY 0.1
+//#define DELAY 0
 
 int main(void)
 {
@@ -44,12 +44,8 @@ int main(void)
 
 	processes = GetProcesses(input);
 
-	printf("quantum : ");
-
-	scanf("%u", &quantum);
-
 	// RR(stdout, processes, quantum, DELAY);
-	RR(output, processes, quantum, DELAY);
+	MLFQ(stdout, processes, DELAY);
 
 	CloseProcesses(processes);
 

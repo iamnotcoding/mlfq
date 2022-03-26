@@ -30,6 +30,7 @@ Processes GetProcesses(FILE *in)
 						sizeof *processes.processList * (i / 10 + 1) *
 							100); // default size
 
+		
 			if (processes.processList == NULL)
 			{
 				char tempStr[100];
@@ -49,8 +50,8 @@ Processes GetProcesses(FILE *in)
 			&(processes.processList[i].io), &(processes.processList[i].repeat));
 
 		processes.processList[i].b = 0;
-		processes.processList[i].q = 0;
-		
+		processes.processList[i].g = 0;
+
 		if ((r != 5 && r != EOF) || ferror(in))
 		{
 			char tempStr[100];
