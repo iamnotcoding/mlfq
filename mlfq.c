@@ -4,11 +4,39 @@
 
 #include "prioque.h"
 
+void read_process_description(void);
+void init_all_queues(void);
+void do_IO(void);
+void execute_highest_priority_process(void);
+void queue_new_arrivals(void);
+void final_report(void);
+int processes_exist(void);
 
-void mlfq()
+typedef struct
 {
-	int Clock = 0;
+	unsigned long ioburst;
+	unsigned cpuburst;
+	int repeat;
+} ProcessBehavior;
 
+typedef struct Process
+{
+	int arrival_time;
+	int pid;
+	int b;
+	int g;
+	Queue behaviors;
+} Process;
+
+Process IdleProcess;
+Queue ArrivalQ;
+
+void init_process(Process *p);
+
+int Clock = 0;
+
+int main(int argc, char *argv[])
+{
 	init_all_queues();
 	init_process(&IdleProcess);
 	read_process_description();
@@ -23,6 +51,8 @@ void mlfq()
 
 	Clock++;
 	final_report();
+
+	return 0;
 }
 
 void init_all_queues(void)
